@@ -1,0 +1,45 @@
+# dotfiles/bash/bash_aliases
+
+# Ubuntu 20.04以降/etc/bash_completion.d/git-prompt.shはあるっぽいのでいらないか？
+#if [ -e $HOME/.bash_completion.d ]; then
+#  nullglob_status=$(shopt -p nullglob)
+#    shopt -s nullglob
+#    for f in ~/.bash_completion.d/*.bash ; do
+#      source $f
+#    done
+#  $nullglob_status
+#fi
+
+################################################################################
+# Prompt
+################################################################################
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+############### ターミナルのコマンド受付状態の表示変更
+# \u ユーザ名
+# \h ホスト名
+# \W カレントディレクトリ
+# \w カレントディレクトリのパス
+# \n 改行
+# \d 日付
+# \[ 表示させない文字列の開始
+# \] 表示させない文字列の終了
+# \$ $
+if [ "$color_prompt" = yes ]; then
+#    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\]@\[:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1)\$ '
+    PS1="\u@\[$(tput sgr0)\]\[\033[38;5;196m\]\h\[$(tput sgr0)\]:\w\$(__git_ps1)\$ \[$(tput sgr0)\]"
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+
+
